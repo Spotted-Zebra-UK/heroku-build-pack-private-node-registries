@@ -34,7 +34,8 @@ if [ -f .npmrc ]; then
   rm -rf .npmrc
 fi
 
-touch .npmrc
+echo "Attempting to create .npmrc from the input:" | indent
+echo "$NPM_REGISTRIES" | indent
 
 # Convert the semi-colon separated string into array of multiple registries
 IFS=';' read -ra REGISTRIES <<< "$NPM_REGISTRIES"
