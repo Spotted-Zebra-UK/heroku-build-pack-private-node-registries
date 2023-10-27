@@ -3,6 +3,10 @@
 set -e
 set -o pipefail
 
+readonly BUILD_DIR=$1
+readonly CACHE_DIR=$2
+readonly ENV_DIR=$3
+
 function indent() {
   c='s/^/       /'
   case $(uname) in
@@ -13,8 +17,6 @@ function indent() {
 
 echo 'Setting up private NPM registries.' | indent
 
-readonly BUILD_DIR=$1
-
 if [[ ! -n "${BUILD_DIR}" ]]; then
   echo "Failed! No build directory specified." | indent
   exit 1
@@ -22,11 +24,9 @@ fi
 
 cd ${BUILD_DIR}
 
-# Check if NPM_REGISTRIES is not set or is empty
-if [ -z "${NPM_REGISTRIES}" ]; then
-  echo "Skipping creation of .npmrc as NPM_REGISTRIES is not set." | indent
-  echo "NPM_REGISTRIES=${NPM_REGISTRIES}" | indent
-  exit 0
+if [ ! -f ${ENV_DIR}/NPM_REGISTRIES ]; then
+  echo "Failed! Variable \$NPM_REGISTRIES not set." | indent
+  exit 1
 fi
 
 # Convert the semi-colon separated string into array of multiple registries
@@ -37,9 +37,26 @@ for registry in "${REGISTRIES[@]}"; do
   IFS='|' read -ra SCOPE <<< "$registry"
 
   namespace=${SCOPE[0]}
+
+  if [[ ! -n "${namespace}" ]]; then
+    echo "Failed! No namespace specified for $registry" | indent
+    exit 1
+  fi
+
   url=${SCOPE[1]}
+
+  if [[ ! -n "${url}" ]]; then
+    echo "Failed! No url specified for $registry" | indent
+    exit 1
+  fi
+
   trimmed_url="${url#http*://}"
   token=${SCOPE[2]}
+
+  if [[ ! -n "${token}" ]]; then
+    echo "Failed! No token specified for $registry" | indent
+    exit 1
+  fi
 
 cat >> .npmrc << EOL
 @${namespace}:registry=${url}
