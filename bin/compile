@@ -29,6 +29,8 @@ if [ ! -f ${ENV_DIR}/NPM_REGISTRIES ]; then
   exit 1
 fi
 
+NPM_REGISTRIES=${NPM_REGISTRIES}
+
 # Delete the .npmrc that might already exist
 if [ -f .npmrc ]; then
   rm -rf .npmrc
