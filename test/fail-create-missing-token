@@ -16,8 +16,10 @@ touch NPM_REGISTRIES
 # First: the BUILD_DIR
 # Second: the CACHE_DIR
 # Third: the ENV_DIR
-./bin/compile "$use_dir" "$use_dir" "$use_dir"
+echo "START COMMAND OUTPUT"
+./bin/compile $use_dir $use_dir $use_dir
 exit_status=$?
+echo "EMD COMMAND OUTPUT"
 
 # Delete the env file
 rm -rf NPM_REGISTRIES

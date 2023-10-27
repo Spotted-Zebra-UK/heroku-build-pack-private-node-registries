@@ -6,7 +6,9 @@ use_dir=$(pwd)
 # First: the BUILD_DIR
 # Second: the CACHE_DIR
 # Third: the ENV_DIR
+echo "START COMMAND OUTPUT"
 (./bin/compile $use_dir $use_dir $use_dir)
+echo "EMD COMMAND OUTPUT"
 
 echo ""
 echo "#####################################################"
