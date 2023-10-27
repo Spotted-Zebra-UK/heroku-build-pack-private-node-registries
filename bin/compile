@@ -29,6 +29,11 @@ if [ ! -f ${ENV_DIR}/NPM_REGISTRIES ]; then
   exit 1
 fi
 
+# Delete the .npmrc that might already exist
+if [ -f .npmrc ]; then
+  rm -rf .npmrc
+fi
+
 touch .npmrc
 
 # Convert the semi-colon separated string into array of multiple registries
@@ -69,7 +74,9 @@ cat >> .npmrc << EOL
 EOL
 done
 
+echo "" | indent
 cat .npmrc | indent
 echo "" | indent
+
 echo "Done!" | indent
 exit 0
