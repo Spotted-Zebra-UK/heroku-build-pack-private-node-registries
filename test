@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+export NPM_REGISTRIES="namespace-1|https://registry-1.com/|token-1;namespace-2|http://registry-2.com/|token-2"
+
+echo "Set the NPM_REGISTRIES"
+echo $NPM_REGISTRIES
+echo ""
+
+(./bin/compile $(pwd))
+echo ""
+echo "#####################################################"
+echo ""
+
+filename=".npmrc"
+
+actual=$(cat "$filename")
+
+expected="@namespace-1:registry=https://registry-1.com/
+//registry-1.com/:_authToken=token-1
+@namespace-2:registry=http://registry-2.com/
+//registry-2.com/:_authToken=token-2"
+
+if [ "$actual" != "$expected" ]
+then
+    echo "FAIL: $filename is not as expected, got:"
+    echo ""
+    echo "Actual:"
+    cat $filename
+    
+    echo ""
+    echo "Expected:"
+    echo "$expected"
+    rm -rf $filename
+    exit 1
+fi
+
+echo "SUCCESS: $filename is as expected"
+echo ""
+cat $filename
+rm -rf $filename

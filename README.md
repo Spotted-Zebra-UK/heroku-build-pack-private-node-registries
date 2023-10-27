@@ -1,6 +1,6 @@
 # heroku-build-pack-private-node-registries
 
-Sets up `.yarnrc.yml` with required private NPM registries.
+Sets up `.npmrc` with required private NPM registries.
 
 # How to use
 
@@ -25,17 +25,14 @@ If you are using the Github action `akhileshns/heroku-deploy` you will need to p
 The format of the variable:
 
 ```
-HD_NPM_REGISTRIES: "namespace-1|https://registry-1.com/|token-1;namespace-2|https://registry-2.com/|token-2"
+NPM_REGISTRIES: "namespace-1|https://registry-1.com/|token-1;namespace-2|http://registry-2.com/|token-2"
 ```
 
-The above variable will create the following `.yarnrc.yml`:
+The above variable will create the following `.npmrc`:
 
-```yaml
-npmScopes:
-  namespace-1:
-    npmAuthToken: "token-1"
-    npmRegistryServer: https://registry-1.com/
-  namespace-2:
-    npmAuthToken: "token-2"
-    npmRegistryServer: https://registry-2.com/
+```bash
+@namespace-1:registry=https://registry-1.com/
+//registry-1.com/:_authToken=token-1
+@namespace-2:registry=http://registry-2.com/
+//registry-2.com/:_authToken=token-2
 ```
