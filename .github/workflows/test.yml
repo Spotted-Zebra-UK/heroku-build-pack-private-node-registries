@@ -7,5 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run tests
-        run: ./test
+
+      - name: Should pass the creation test
+        run: ./test/success-create
+
+      - name: Should skip creating without the provided ENV
+        run: ./test/skip-create
+
+      - name: Should fail creating because of missing namespace
+        run: ./test/fail-create-missing-namespace
+
+      - name: Should fail creating because of missing url
+        run: ./test/fail-create-missing-url
+
+      - name: Should fail creating because of missing token
+        run: ./test/fail-create-missing-token

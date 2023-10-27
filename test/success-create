@@ -6,7 +6,21 @@ echo "Set the NPM_REGISTRIES"
 echo $NPM_REGISTRIES
 echo ""
 
-(./bin/compile $(pwd))
+use_dir=$(pwd)
+
+# Create the env file here because that is the way Heroku does it:
+# file location: ENV_DIR/NPM_REGISTRIES
+touch NPM_REGISTRIES
+
+# Run the actual compile command with passing three arguments
+# First: the BUILD_DIR
+# Second: the CACHE_DIR
+# Third: the ENV_DIR
+(./bin/compile $use_dir $use_dir $use_dir)
+
+# Delete the env file
+rm -rf NPM_REGISTRIES
+
 echo ""
 echo "#####################################################"
 echo ""
@@ -26,7 +40,7 @@ then
     echo ""
     echo "Actual:"
     cat $filename
-    
+
     echo ""
     echo "Expected:"
     echo "$expected"

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+use_dir=$(pwd)
+
+# Run the actual compile command with passing three arguments
+# First: the BUILD_DIR
+# Second: the CACHE_DIR
+# Third: the ENV_DIR
+(./bin/compile $use_dir $use_dir $use_dir)
+
+echo ""
+echo "#####################################################"
+echo ""
+
+filename=".npmrc"
+
+if [ -f ${filename} ]; then
+  echo "Failed! Created the $filename even though no env was provided."
+  exit 1
+fi
+
+echo "SUCCESS: $filename was not created"
