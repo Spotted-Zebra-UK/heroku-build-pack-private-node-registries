@@ -36,3 +36,33 @@ The above variable will create the following `.npmrc`:
 @namespace-2:registry=http://registry-2.com/
 //registry-2.com/:_authToken=token-2
 ```
+
+# Example Github action
+
+Within this example we are assuming you are using this buildpack and you are building your application then with the `heroku/nodejs` buildpack.
+
+```yaml
+name: deploy-to-heroku
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  deploy-to-heroku:
+    name: 'Deploy to heroku'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: my-app-name
+          heroku_email: user@example.com
+        env:
+          HD_NODE_MODULES_CACHE: false
+          HD_USE_YARN_CACHE: false
+          HD_NPM_REGISTRIES: "my-npm-namespace|https://registry.com|${{ secrets.REGISTRY_TOKEN }}"
+```
