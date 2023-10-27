@@ -31,15 +31,9 @@ fi
 
 NPM_REGISTRIES=(`cat ${ENV_DIR}/NPM_REGISTRIES`)
 
-# Delete the .npmrc that might already exist
-if [ -f .npmrc ]; then
-  rm -rf .npmrc
-fi
-
-touch .npmrc
-
 echo "Attempting to create .npmrc from the input:" | indent
 echo "$NPM_REGISTRIES" | indent
+touch .npmrc
 
 # Convert the semi-colon separated string into array of multiple registries
 IFS=';' read -ra REGISTRIES <<< "$NPM_REGISTRIES"
@@ -52,7 +46,6 @@ for registry in "${REGISTRIES[@]}"; do
 
   if [[ ! -n "${namespace}" ]]; then
     echo "Failed! No namespace specified for $registry" | indent
-    rm -rf .npmrc
     exit 1
   fi
 
@@ -60,7 +53,6 @@ for registry in "${REGISTRIES[@]}"; do
 
   if [[ ! -n "${url}" ]]; then
     echo "Failed! No url specified for $registry" | indent
-    rm -rf .npmrc
     exit 1
   fi
 
@@ -69,7 +61,6 @@ for registry in "${REGISTRIES[@]}"; do
 
   if [[ ! -n "${token}" ]]; then
     echo "Failed! No token specified for $registry" | indent
-    rm -rf .npmrc
     exit 1
   fi
 
