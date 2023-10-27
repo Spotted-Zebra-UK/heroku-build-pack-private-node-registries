@@ -22,12 +22,10 @@ fi
 
 cd ${BUILD_DIR}
 
-# Serialized registries are passed as an environment variable
-NPM_REGISTRIES=${NPM_REGISTRIES}
-
 # Check if NPM_REGISTRIES is not set or is empty
 if [ -z "${NPM_REGISTRIES}" ]; then
   echo "Skipping creation of .npmrc as NPM_REGISTRIES is not set." | indent
+  echo "NPM_REGISTRIES=${NPM_REGISTRIES}" | indent
   exit 0
 fi
 
