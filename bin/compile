@@ -27,13 +27,9 @@ NPM_REGISTRIES=${NPM_REGISTRIES}
 
 # Check if NPM_REGISTRIES is not set or is empty
 if [ -z "${NPM_REGISTRIES}" ]; then
-  echo "Skipping creation of .yarnrc.yml as NPM_REGISTRIES is not set." | indent
+  echo "Skipping creation of .npmrc as NPM_REGISTRIES is not set." | indent
   exit 0
 fi
-
-cat >> .yarnrc.yml << EOL
-npmScopes:
-EOL
 
 # Convert the semi-colon separated string into array of multiple registries
 IFS=';' read -ra REGISTRIES <<< "$NPM_REGISTRIES"
@@ -41,10 +37,15 @@ IFS=';' read -ra REGISTRIES <<< "$NPM_REGISTRIES"
 for registry in "${REGISTRIES[@]}"; do
   # Convert the pipe separated string into array of registry, scope and token
   IFS='|' read -ra SCOPE <<< "$registry"
-  cat >> .yarnrc.yml << EOL
-  ${SCOPE[0]}:
-    npmAuthToken: "${SCOPE[2]}"
-    npmRegistryServer: "${SCOPE[1]}"
+
+  namespace=${SCOPE[0]}
+  url=${SCOPE[1]}
+  trimmed_url="${url#http*://}"
+  token=${SCOPE[2]}
+
+cat >> .npmrc << EOL
+@${namespace}:registry=${url}
+//${trimmed_url}:_authToken=${token}
 EOL
 done
 
