@@ -19,14 +19,14 @@ echo 'Setting up private NPM registries.' | indent
 
 if [[ ! -n "${BUILD_DIR}" ]]; then
   echo "Failed! No build directory specified." | indent
-  exit 1
+  exit 0
 fi
 
 cd ${BUILD_DIR}
 
 if [ ! -f ${ENV_DIR}/NPM_REGISTRIES ]; then
-  echo "Failed! Variable \$NPM_REGISTRIES not set." | indent
-  exit 1
+  echo "Skipping, variable \$NPM_REGISTRIES not set." | indent
+  exit 0
 fi
 
 NPM_REGISTRIES=(`cat ${ENV_DIR}/NPM_REGISTRIES`)

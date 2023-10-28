@@ -7,7 +7,8 @@ use_dir=$(pwd)
 # Second: the CACHE_DIR
 # Third: the ENV_DIR
 echo "START COMMAND OUTPUT"
-(./bin/compile $use_dir $use_dir $use_dir)
+./bin/compile $use_dir $use_dir $use_dir
+exit_status=$?
 echo "EMD COMMAND OUTPUT"
 
 echo ""
@@ -21,4 +22,9 @@ if [ -f ${filename} ]; then
   exit 1
 fi
 
-echo "SUCCESS: $filename was not created"
+if [ $exit_status -eq 1 ]; then
+    echo "FAIL: The script did not fail as expected"
+    exit 1
+else
+    echo "SUCCESS: $filename was not created and the script exited gracefully"
+fi
